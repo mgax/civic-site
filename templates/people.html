@@ -1,7 +1,10 @@
-<ul>
+<table>
 {% for person in people %}
-    <li>
-    {{ person.name }}
-    </li>
+    <tr>
+    <td>{{ person.name }}</td>
+    <td><a href="{{ civic_url(person.person) }}">
+      {{- civic_url(person.person) -}}
+    </a></td>
+    </tr>
 {% endfor %}
-</ul>
+</table>
