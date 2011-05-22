@@ -1,1 +1,10 @@
 <h1>{{ party.name }}</h1>
+
+<h2>Members</h2>
+<ul>
+    {%- for member in party.members %}
+    <li>
+        <a href="{{ civic_url(member.uri) }}">{{- member.name -}}</a>
+    </li>
+    {% endfor -%}
+</ul>

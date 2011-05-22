@@ -88,6 +88,20 @@ def get_party(party_id):
         SELECT ?name WHERE {
             $party rdfs:label ?name .
         }""").substitute(party=party))
-    return {
+    out = {
         'name': result[0].name,
     }
+
+    result = query(Template("""\
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+        PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
+        SELECT ?person ?person_name WHERE {
+            ?person civic_types:memberInParty $party .
+            ?person foaf:name ?person_name .
+        }""").substitute(party=party))
+    out['members'] = [{
+        'name': row.person_name,
+        'uri': row.person.value,
+    } for row in result]
+
+    return out
