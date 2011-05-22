@@ -18,9 +18,8 @@ def list_people():
 
 @civic_app.route("/person/<person_id>")
 def person_info(person_id):
-    person_uri = '%sperson/%s' % (data.CIVIC_URI, person_id)
     options = {
-        'person': data.get_person(person_uri)[0],
+        'person': data.get_person(person_id),
     }
     return flask.render_template('person.html', **options)
 

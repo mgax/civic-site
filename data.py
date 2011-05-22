@@ -40,6 +40,6 @@ SELECT * WHERE {
     $person foaf:name ?name .
 }
 """)
-def get_person(person_uri):
-    vars = {'person': sparql.IRI(person_uri).n3()}
-    return query(_get_person_query_tmpl.substitute(**vars))
+def get_person(person_id):
+    vars = {'person': sparql.IRI('%sperson/%s' % (CIVIC_URI, person_id)).n3()}
+    return query(_get_person_query_tmpl.substitute(**vars))[0]
