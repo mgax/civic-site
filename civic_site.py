@@ -24,4 +24,7 @@ def person_info(person_id):
     return flask.render_template('person.html', **options)
 
 def main():
-    civic_app.run(debug=True)
+    import sys
+    if sys.argv[-1] == "-d":
+        civic_app.debug = True
+    civic_app.run()
