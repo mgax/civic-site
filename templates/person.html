@@ -1,12 +1,18 @@
 <h1>{{ person.name }}</h1>
-{% if person.party_name %}Party: {{ person.party_name }}{% endif %}
+{% if person.party_name %}Party: {{ person.party_name }}
+{%- else %}Independent{% endif %}
+
 
 {% if person.elections %}
 <h2>Elections</h2>
 <ul>
     {%- for election in person.elections %}
     <li>
-    Party: {{ election.party_name }};
+    {% if election.party_name -%}
+        Party: {{ election.party_name }}
+    {%- else -%}
+        Independent
+    {%- endif %};
     Result: {{ election.vote_fraction * 100 }}%
     {% if election.is_winner %}(winner){% endif %}
     Election: {{ election.election_name }}

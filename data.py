@@ -39,8 +39,10 @@ def get_person(person_id):
         PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
         SELECT ?name ?party_name WHERE {
             $person foaf:name ?name .
-            $person civic_types:memberInParty ?party .
-            ?party rdfs:label ?party_name .
+            OPTIONAL {
+                $person civic_types:memberInParty ?party .
+                ?party rdfs:label ?party_name .
+            }
         }""").substitute(person=person))
     out = {
         'name': result[0].name,
@@ -54,13 +56,17 @@ def get_person(person_id):
         SELECT ?party_name ?vote_fraction ?is_winner ?election_name WHERE {
 
             _:campaign civic_types:candidate $person .
-            _:campaign civic_types:party ?party .
             _:campaign civic_types:voteFraction ?vote_fraction .
             _:campaign civic_types:win ?is_winner .
-            _:campaign civic_types:election ?election .
 
-            ?party rdfs:label ?party_name .
+            _:campaign civic_types:election ?election .
             ?election rdfs:label ?election_name .
+
+            OPTIONAL {
+                _:campaign civic_types:party ?party .
+                ?party rdfs:label ?party_name .
+            }
+
         }""").substitute(person=person))
     out['elections'] = list(result)
 
