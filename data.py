@@ -10,9 +10,6 @@ def civic_url(uri):
         return "BAD_RDF_URI"
     return '/' + str(uri)[len(CIVIC_URI):]
 
-def context_processor():
-    return {'civic_url': civic_url}
-
 
 def query(query_str):
     endpoint = "http://localhost:11746/sparql/"

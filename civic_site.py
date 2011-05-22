@@ -3,7 +3,7 @@ import data
 
 civic_app = flask.Flask(__name__)
 
-civic_app.context_processor(data.context_processor)
+civic_app.context_processor(lambda: {'civic_url': data.civic_url})
 
 @civic_app.route("/")
 def index_html():
