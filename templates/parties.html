@@ -1,0 +1,10 @@
+<table>
+{% for party in parties %}
+    <tr>
+    <td>{{ party.name }}</td>
+    <td><a href="{{ civic_url(party.party) }}">
+      {{- civic_url(party.party) -}}
+    </a></td>
+    </tr>
+{% endfor %}
+</table>

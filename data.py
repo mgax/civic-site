@@ -69,3 +69,25 @@ def get_person(person_id):
     out['elections'] = list(result)
 
     return out
+
+def get_parties():
+    return query("""\
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
+        SELECT * WHERE {
+            ?party rdf:type civic_types:Party .
+            ?party rdfs:label ?name .
+        }""")
+
+def get_party(party_id):
+    party = sparql.IRI('%sparty/%s' % (CIVIC_URI, party_id)).n3()
+    result = query(Template("""\
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
+        SELECT ?name WHERE {
+            $party rdfs:label ?name .
+        }""").substitute(party=party))
+    return {
+        'name': result[0].name,
+    }
