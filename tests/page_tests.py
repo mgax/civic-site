@@ -1,4 +1,5 @@
 import unittest2 as unittest
+from collections import namedtuple
 import lxml.html.soupparser, lxml.cssselect
 from mock import patch
 
@@ -32,11 +33,11 @@ class PageTests(unittest.TestCase):
         href_list = [a.attrib['href'] for a in css('a', page)]
         self.assertIn('/person/', href_list)
 
-    @patch('data.sparql')
-    def test_person_page(self, mock_sparql):
-        sparql_results = [
-            MockResponse('name', [("Gigel Jmecher",)]),
+    @patch('data.query')
+    def test_person_page(self, mock_query):
+        query_results = [
+            [namedtuple('row', 'name')("Gigel Jmecher")],
         ]
-        mock_sparql.query.side_effect = lambda *args: sparql_results.pop()
+        mock_query.side_effect = lambda *args: query_results.pop()
         page = tree(self.c.get('/person/gigel').data)
         self.assertEqual(csstext('h1', page), "Gigel Jmecher")

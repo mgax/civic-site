@@ -18,7 +18,7 @@ def query(query_str):
     endpoint = "http://localhost:11746/sparql/"
     result = sparql.query(endpoint, query_str)
     row_tuple = namedtuple('row', ' '.join(result.variables))
-    return [row_tuple(*row) for row in result]
+    return [row_tuple(*sparql.unpack_row(row)) for row in result]
 
 
 _get_people_query = """\
