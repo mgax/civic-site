@@ -1,1 +1,13 @@
 <h1>{{ person.name }}</h1>
+
+{% if person.elections %}
+<h2>Elections</h2>
+<ul>
+    {%- for election in person.elections %}
+    <li>
+    Party: {{ election.party_name }};
+    Result: {{ election.vote_fraction * 100 }}%
+    </li>
+    {% endfor -%}
+</ul>
+{% endif %}

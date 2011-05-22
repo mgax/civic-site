@@ -34,12 +34,35 @@ def get_people():
     return query(_get_people_query)
 
 
-_get_person_query_tmpl = Template("""\
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-SELECT * WHERE {
-    $person foaf:name ?name .
-}
-""")
 def get_person(person_id):
-    vars = {'person': sparql.IRI('%sperson/%s' % (CIVIC_URI, person_id)).n3()}
-    return query(_get_person_query_tmpl.substitute(**vars))[0]
+    from pprint import pprint
+
+    person = sparql.IRI('%sperson/%s' % (CIVIC_URI, person_id)).n3()
+    result = query(Template("""\
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+        SELECT * WHERE {
+            $person foaf:name ?name .
+        }""").substitute(person=person))
+    out = {
+        'name': result[0].name,
+        'elections': [],
+    }
+
+
+    result = query(Template("""\
+        PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        SELECT ?party_name ?vote_fraction WHERE {
+            ?campaign civic_types:candidate $person .
+            ?campaign civic_types:party ?party .
+            ?party rdfs:label ?party_name .
+            ?campaign civic_types:voteFraction ?vote_fraction .
+        }""").substitute(person=person))
+
+    for row in result:
+        out['elections'].append({
+            'party_name': row.party_name,
+            'vote_fraction': row.vote_fraction,
+        })
+
+    return out

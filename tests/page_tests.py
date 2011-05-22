@@ -37,7 +37,8 @@ class PageTests(unittest.TestCase):
     def test_person_page(self, mock_query):
         query_results = [
             [namedtuple('row', 'name')("Gigel Jmecher")],
+            [],
         ]
-        mock_query.side_effect = lambda *args: query_results.pop()
+        mock_query.side_effect = lambda *args: query_results.pop(0)
         page = tree(self.c.get('/person/gigel').data)
         self.assertEqual(csstext('h1', page), "Gigel Jmecher")
