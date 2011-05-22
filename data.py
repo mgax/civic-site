@@ -30,8 +30,6 @@ def get_people():
 
 
 def get_person(person_id):
-    from pprint import pprint
-
     person = sparql.IRI('%sperson/%s' % (CIVIC_URI, person_id)).n3()
     result = query(Template("""\
         PREFIX foaf: <http://xmlns.com/foaf/0.1/>
