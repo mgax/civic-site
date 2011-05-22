@@ -35,29 +35,33 @@ def get_person(person_id):
     person = sparql.IRI('%sperson/%s' % (CIVIC_URI, person_id)).n3()
     result = query(Template("""\
         PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-        SELECT * WHERE {
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
+        SELECT ?name ?party_name WHERE {
             $person foaf:name ?name .
+            $person civic_types:memberInParty ?party .
+            ?party rdfs:label ?party_name .
         }""").substitute(person=person))
     out = {
         'name': result[0].name,
+        'party_name': result[0].party_name,
         'elections': [],
     }
-
 
     result = query(Template("""\
         PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        SELECT ?party_name ?vote_fraction WHERE {
-            ?campaign civic_types:candidate $person .
-            ?campaign civic_types:party ?party .
-            ?party rdfs:label ?party_name .
-            ?campaign civic_types:voteFraction ?vote_fraction .
-        }""").substitute(person=person))
+        SELECT ?party_name ?vote_fraction ?is_winner ?election_name WHERE {
 
-    for row in result:
-        out['elections'].append({
-            'party_name': row.party_name,
-            'vote_fraction': row.vote_fraction,
-        })
+            _:campaign civic_types:candidate $person .
+            _:campaign civic_types:party ?party .
+            _:campaign civic_types:voteFraction ?vote_fraction .
+            _:campaign civic_types:win ?is_winner .
+            _:campaign civic_types:election ?election .
+
+            ?party rdfs:label ?party_name .
+            ?election rdfs:label ?election_name .
+        }""").substitute(person=person))
+    out['elections'] = list(result)
 
     return out
