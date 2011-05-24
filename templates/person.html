@@ -6,17 +6,22 @@
 {% if person.elections %}
 <h2>Elections</h2>
 <ul>
-    {%- for election in person.elections %}
-    <li>
-    {% if election.party_name -%}
-        Party: {{ election.party_name }}
-    {%- else -%}
-        Independent
-    {%- endif %};
-    Result: {{ election.vote_fraction * 100 }}%
-    {% if election.is_winner %}(winner){% endif %}
-    Election: {{ election.election_name }}
-    </li>
-    {% endfor -%}
+  {%- for election in person.elections %}
+  <li>
+    <dl>
+      {% if election.party_name -%}
+      <dt>Party:</dt> <dd>{{ election.party_name }}</dd>
+      {%- else -%}
+      <dt>Independent</dt>
+      {%- endif %}
+
+      <dt>Election:</dt>
+      <dd>{{ election.election_name }} ({{ election.constituency_name }})</dd>
+
+      <dt>Result:</dt> <dd>{{ election.vote_fraction * 100 }}%
+      {%- if election.is_winner %}(winner){% endif %}</dd>
+  </dl>
+  </li>
+  {% endfor -%}
 </ul>
 {% endif %}

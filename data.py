@@ -51,7 +51,9 @@ def get_person(person_id):
     result = query(Template("""\
         PREFIX civic_types: <http://civic.grep.ro/rdftypes/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        SELECT ?party_name ?vote_fraction ?is_winner ?election_name WHERE {
+        SELECT ?party_name ?vote_fraction ?is_winner ?election_name
+               ?constituency_name
+        WHERE {
 
             _:campaign civic_types:candidate $person .
             _:campaign civic_types:voteFraction ?vote_fraction .
@@ -59,6 +61,9 @@ def get_person(person_id):
 
             _:campaign civic_types:election ?election .
             ?election rdfs:label ?election_name .
+
+            _:campaign civic_types:constituency ?constituency .
+            ?constituency rdfs:label ?constituency_name .
 
             OPTIONAL {
                 _:campaign civic_types:party ?party .
