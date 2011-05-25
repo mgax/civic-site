@@ -1,0 +1,63 @@
+<style>
+  blockquote.sparql-query {
+    font-family: monospace;
+    white-space: pre;
+    background: #ddd;
+    padding: 5px;
+    border: 2px solid #bbb;
+  }
+
+  .sparql-query span.variable {
+    background: #c90;
+  }
+  .sparql-query span.variable.interpolated {
+    background: #6d6;
+  }
+
+  table.sparql-results {
+    border-collapse: collapse;
+  }
+  table.sparql-results th, table.sparql-results td {
+    border: 1px solid #999;
+    padding: 3px;
+  }
+
+  p.sparql-stats .number {
+    font-family: monospace;
+    font-weight: bold;
+    color: #a50;
+  }
+
+  p.sparql-has-result .boolean {
+    font-weight: bold;
+    color: #a50;
+  }
+
+  .sparql-error {
+    white-space: pre;
+    border: 2px solid #f00;
+  }
+</style>
+
+<blockquote class="sparql-query">{{ result.query|safe }}</blockquote>
+
+{% if result.data -%}
+<table class="sparql-results">
+  <thead>
+    <tr>
+    {%- for name in result.data.var_names %}
+      <th>{{ name }}</th>
+    {% endfor -%}
+    </tr>
+  </thead>
+  <tbody>
+  {%- for row in result.data.rows %}
+    <tr>
+    {%- for value in row %}
+      <td>{{ value }}</td>
+    {% endfor -%}
+    </tr>
+  {% endfor -%}
+  </tbody>
+</table>
+{%- endif %}

@@ -37,6 +37,14 @@ def party_info(party_id):
     }
     return flask.render_template('party.html', **options)
 
+@civic_app.route("/sparql-demo/<query_name>")
+def sparql_demo(query_name):
+    from demo_queries import queries
+    q = queries[query_name]
+    data = flask.request.args.to_dict()
+    result = q.data_for_test_html(data)
+    return flask.render_template('sparql-demo.html', result=result)
+
 def main():
     import sys
     if sys.argv[-1] == "-d":
