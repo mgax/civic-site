@@ -39,7 +39,14 @@
   }
 </style>
 
-<blockquote class="sparql-query">{{ result.query|safe }}</blockquote>
+<form method="post">
+  <textarea rows="20" cols="120" name="query">{{ query }}</textarea>
+  <br><input type="submit" value="evaluate">
+</form>
+
+{% if result.error %}
+<div class="sparql-error">{{ result.error }}</div>
+{% endif %}
 
 {% if result.data -%}
 <table class="sparql-results">

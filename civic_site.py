@@ -37,13 +37,22 @@ def party_info(party_id):
     }
     return flask.render_template('party.html', **options)
 
-@civic_app.route("/sparql-demo/<query_name>")
-def sparql_demo(query_name):
-    from demo_queries import queries
-    q = queries[query_name]
-    data = flask.request.args.to_dict()
-    result = q.data_for_test_html(data)
-    return flask.render_template('sparql-demo.html', result=result)
+
+@civic_app.route("/test", methods=['GET', 'POST'])
+def sparql_test():
+    query = ""
+    result = None
+
+    if flask.request.method == 'POST':
+        from Products.ZSPARQLMethod.pquery import QueryService
+        endpoint = "http://localhost:11746/sparql/"
+        query = flask.request.form['query']
+        # TODO QueryService assumes we pass in arguments; need to simplify
+        q = QueryService(endpoint, '', query)
+        result = q.data_for_test_html({})
+
+    return flask.render_template('sparql-test.html',
+                                 query=query, result=result)
 
 
 def parse_options():
