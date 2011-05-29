@@ -47,6 +47,13 @@ def sparql_demo(query_name):
 
 def main():
     import sys
-    if sys.argv[-1] == "-d":
+
+    if len(sys.argv) > 2 and sys.argv[-2] == "--fastcgi":
+        from flup.server.fcgi import WSGIServer
+        WSGIServer(civic_app, bindAddress=sys.argv[-1], umask=0).run()
+        return
+
+    elif sys.argv[-1] == "-d":
         civic_app.debug = True
+
     civic_app.run()
