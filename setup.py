@@ -9,6 +9,7 @@ setup(
         'Products.ZSPARQLMethod',
         'flup',
         'python-daemon',
+        'Sphinx',
     ],
     entry_points={'console_scripts': ['civic-site = civic_site:main']},
 )
