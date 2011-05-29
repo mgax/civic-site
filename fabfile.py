@@ -1,6 +1,6 @@
 import os.path
 from StringIO import StringIO
-from fabric.api import env, local, cd, run, put
+from fabric.api import env, local, cd, run, put, open_shell
 
 env.hosts = ['redcoat']
 server_prefix = "/home/alexm/sites/civic.grep.ro"
@@ -113,3 +113,6 @@ def rdfupload(local_path):
     put(local_path, remote_path)
     run("%s/4s-import civic <(bzcat '%s') -m '%s'" % (
             bin_prefix, remote_path, rdf_name))
+
+def shell():
+    open_shell(". .profile && cd '%s' && . bin/activate" % server_prefix)
