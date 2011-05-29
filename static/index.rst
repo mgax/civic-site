@@ -14,7 +14,7 @@ Avem următoarele informații în baza de date:
 .. TODO rdf, sparql; de ce
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
    :glob:
 
    datasets/*
