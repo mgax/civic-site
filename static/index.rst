@@ -1,11 +1,18 @@
 CivicDB este o bază de date cu informații despre administrația publică din
-România. Suntem la început și avem multe date de adunat, dar sperăm ca, în
-curând, CivicDB să devină o resursă pentru jurnaliști, ONG-uri și în general
-oricine vrea să afle date concrete despre administrația pubică.
+România. Datele sunt fost obținute din surse publice, de către diverse
+persoane și organizații, și sunt adunate aici pentru a ușura munca oricui are
+nevoie de acces la aceste informații.
 
-Avem următoarele informații în baza de date:
+Pentru interogări puteți folosi `pagina de test`_ sau `serviciul SPARQL`_.
+Sunt disponibile următoarele seturi de date:
 
  * :ref:`alegeri-2008` - participanți și rezultate
+
+.. _`pagina de test`: /test
+.. _`serviciul SPARQL`: /sparql
+
+.. TODO datele sunt libere?
+.. TODO licență pentru software, paginile din site și baza de date
 
 
 Tehnologie
@@ -39,8 +46,6 @@ o bază de date relațională:
 .. _4store: http://4store.org/
 .. _SPARQL: http://www.w3.org/standards/techs/sparql
 
-
-.. TODO licență
 
 .. toctree::
    :hidden:
