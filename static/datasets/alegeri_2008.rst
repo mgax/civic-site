@@ -11,6 +11,9 @@ din care fac parte și care le-au susținut candidatura, și rezulatul obținut
 .. _`alegeri.tv`: http://www.alegeri.tv/
 
 
+Termeni
+-------
+
 Urmează o descriere a termenilor RDF folosiți în baza de date. Pentru fiecare
 clasă sunt enumerate proprietățile, sub formă de predicat RDF urmat de tipul
 de date al valorilor. De exemplu, candidații (`?person`) au tipul
@@ -26,7 +29,7 @@ Numele candidatului (`?name`) este specificat cu proprietatea `foaf:name`::
 .. _`civic:Person`:
 
 ``civic:Person`` - candidat la alegeri
---------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``foaf:name`` `Literal`
     Nume și prenume
@@ -38,7 +41,7 @@ Numele candidatului (`?name`) este specificat cu proprietatea `foaf:name`::
 .. _`civic:Party`:
 
 ``civic:Party`` - partid politic
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``rdfs:label`` `Literal`
     Numele partidului
@@ -47,7 +50,7 @@ Numele candidatului (`?name`) este specificat cu proprietatea `foaf:name`::
 .. _`civic:Election`:
 
 ``civic:Election`` - tur de alegeri
------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``rdfs:label`` `Literal`
     Numele turului de alegeri
@@ -56,7 +59,7 @@ Numele candidatului (`?name`) este specificat cu proprietatea `foaf:name`::
 .. _`civic:Constituency`:
 
 ``civic:Constituency`` - circumscripție electorală
---------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. TODO civic:Constituency does not exist in RDF!
 
@@ -67,7 +70,7 @@ Numele candidatului (`?name`) este specificat cu proprietatea `foaf:name`::
 .. _`civic:Campaign`:
 
 ``civic:Campaign`` - campania unui candidat într-o alegere
-----------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``civic:candidate`` `civic:Person`_
     Persoana care candidează
@@ -86,3 +89,16 @@ Numele candidatului (`?name`) este specificat cu proprietatea `foaf:name`::
 
 ``civic:constituency`` `civic:Constituency`_
     Circumscripția în care are loc campania
+
+
+Exemple
+-------
+
+.. raw:: html
+    :file: alegeri_2008_examples.html
+
+
+Probleme cunoscute
+------------------
+
+ * Sunt confundate persoanele cu același nume.

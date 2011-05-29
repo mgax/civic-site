@@ -1,0 +1,50 @@
+<dl>
+
+  <dt>Toate persoanele din baza de date și partidele din care fac parte</dt>
+  <dd>
+    <form method="post" action="/test">
+      <textarea name="query" rows="12" cols="80">
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX civic: <http://civic.grep.ro/rdftypes/>
+
+SELECT ?person_name, ?person, ?party_name WHERE {
+    ?person foaf:name ?person_name .
+    OPTIONAL {
+        ?person civic:memberInParty ?party .
+        ?party rdfs:label ?party_name .
+    }
+}
+</textarea>
+      <br><input type="submit" value="evaluate">
+    </form>
+  </dd>
+
+  <dt>Rezultatele pentru Municipiul București, turul 1 și 2</dt>
+  <dd>
+    <form method="post" action="/test">
+      <textarea name="query" rows="19" cols="80">
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX civic: <http://civic.grep.ro/rdftypes/>
+
+SELECT ?election, ?person_name, ?party_name, ?vote_fraction, ?win WHERE {
+    _:campaign civic:election ?election .
+    _:campaign civic:constituency <http://civic.grep.ro/city/bucuresti> .
+    _:campaign civic:voteFraction ?vote_fraction .
+    _:campaign civic:win ?win .
+
+    _:campaign civic:candidate ?person .
+    ?person foaf:name ?person_name .
+
+    OPTIONAL {
+        _:campaign civic:party ?party .
+        ?party rdfs:label ?party_name .
+    }
+}
+</textarea>
+      <br><input type="submit" value="evaluate">
+    </form>
+  </dd>
+
+</dl>
