@@ -116,3 +116,9 @@ def rdfupload(local_path):
 
 def shell():
     open_shell(". .profile && cd '%s' && . bin/activate" % server_prefix)
+
+def static():
+    local("rsync -rtv static/_build/html/ 'redcoat:%s/www'" % server_prefix)
+
+def build_static():
+    local("cd static && make html")
