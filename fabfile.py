@@ -1,4 +1,5 @@
 import os.path
+from StringIO import StringIO
 from fabric.api import env, local, cd, run, put
 
 env.hosts = ['redcoat']
@@ -7,6 +8,39 @@ server_repo = "%s/src/civic-site" % server_prefix
 server_rdfs = "%s/rdf" % server_prefix
 fourstore_bin_prefix = "/home/alexm/.local/bin"
 bin_prefix = "%s/bin" % server_prefix
+
+FCGI_RUNNER_SCRIPT = """\
+#!/bin/bash
+CIVIC_SITE='%(prefix)s/bin/civic-site'
+FCGI_SOCK='%(prefix)s/var/civic-site.fcgi'
+PIDFILE='%(prefix)s/var/civic-site.pid'
+
+$CIVIC_SITE --fastcgi $FCGI_SOCK --pidfile $PIDFILE
+"""
+
+RC_SCRIPT = """\
+#! /bin/bash
+
+DAEMON='%(prefix)s/bin/civic-site-fcgi.sh'
+PIDFILE='%(prefix)s/var/civic-site.pid'
+
+case "$1" in
+  start)
+    echo "Starting civic-site FCGI daemon"
+    /sbin/start-stop-daemon --start --pidfile $PIDFILE --exec $DAEMON
+    ;;
+  stop)
+    echo "Stopping civic-site FCGI daemon"
+    /sbin/start-stop-daemon --stop --pidfile $PIDFILE --verbose
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+"""
 
 def push_dep(local_path):
     base_name = os.path.basename(local_path)
@@ -35,8 +69,26 @@ def _setup_virtualenv():
         for name in ['4s-backend', '4s-httpd', '4s-import']:
             run("ln -s '%s/%s' bin/" % (fourstore_bin_prefix, name))
 
+def _upload_fcgi_runner_scripts():
+    with cd('%s/bin' % server_prefix):
+        put(StringIO(FCGI_RUNNER_SCRIPT % {'prefix': server_prefix}),
+            "civic-site-fcgi.sh")
+        put(StringIO(RC_SCRIPT % {'prefix': server_prefix}),
+            "civic-site-rc.sh")
+        run("chmod +x civic-site-fcgi.sh civic-site-rc.sh")
+
+def uprc():
+    _upload_fcgi_runner_scripts()
+
+def start_fcgi():
+    run("%s/bin/civic-site-rc.sh start" % server_prefix)
+
+def stop_fcgi():
+    run("%s/bin/civic-site-rc.sh stop" % server_prefix)
+
 def install_server():
     run("mkdir -p '%s'" % server_prefix)
+    run("mkdir -p '%s'/var" % server_prefix)
     _create_server_repo()
     _setup_virtualenv()
     run("mkdir -p '%s'" % server_rdfs)
@@ -50,6 +102,9 @@ def deploy():
         run("git reset incoming --hard")
     with cd(server_prefix):
         run("bin/pip install -e '%s'" % server_repo)
+    _upload_fcgi_runner_scripts()
+    stop_fcgi()
+    start_fcgi()
 
 def rdfupload(local_path):
     base_name = os.path.basename(local_path)
