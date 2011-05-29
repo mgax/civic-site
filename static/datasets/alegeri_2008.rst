@@ -11,10 +11,78 @@ din care fac parte și care le-au susținut candidatura, și rezulatul obținut
 .. _`alegeri.tv`: http://www.alegeri.tv/
 
 
-Candidat
---------
-``http://civic.grep.ro/rdftypes/Person`` - candidat la alegeri. Are
-următoarele proprietăți:
+Urmează o descriere a termenilor RDF folosiți în baza de date. Pentru fiecare
+clasă sunt enumerate proprietățile, sub formă de predicat RDF urmat de tipul
+de date al valorilor. De exemplu, candidații (`?person`) au tipul
+`civic:Person`_::
 
-``foaf:name``
+    ?person rdf:type civic:Person .
+
+Numele candidatului (`?name`) este specificat cu proprietatea `foaf:name`::
+
+    ?person foaf:name ?name .
+
+
+.. _`civic:Person`:
+
+``civic:Person`` - candidat la alegeri
+--------------------------------------
+
+``foaf:name`` `Literal`
     Nume și prenume
+
+``civic:memberInParty`` `civic:Party`_
+    Membru în partid
+
+
+.. _`civic:Party`:
+
+``civic:Party`` - partid politic
+--------------------------------
+
+``rdfs:label`` `Literal`
+    Numele partidului
+
+
+.. _`civic:Election`:
+
+``civic:Election`` - tur de alegeri
+-----------------------------------
+
+``rdfs:label`` `Literal`
+    Numele turului de alegeri
+
+
+.. _`civic:Constituency`:
+
+``civic:Constituency`` - circumscripție electorală
+--------------------------------------------------
+
+.. TODO civic:Constituency does not exist in RDF!
+
+``rdfs:label`` `Literal`
+    Numele circumscripției
+
+
+.. _`civic:Campaign`:
+
+``civic:Campaign`` - campania unui candidat într-o alegere
+----------------------------------------------------------
+
+``civic:candidate`` `civic:Person`_
+    Persoana care candidează
+
+``civic:party`` `civic:Party`_
+    Partidul care susține campania
+
+``civic:election`` `civic:Election`_
+    Turul de alegeri pentru care are loc campania
+
+``civic:voteFraction`` `Literal`
+    Procentul din voturi câștigat (între `0.0` și `1.0`)
+
+``civic:win`` `Literal`
+    Campanie câștigată (da/nu)
+
+``civic:constituency`` `civic:Constituency`_
+    Circumscripția în care are loc campania
