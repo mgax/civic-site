@@ -45,15 +45,48 @@ def sparql_demo(query_name):
     result = q.data_for_test_html(data)
     return flask.render_template('sparql-demo.html', result=result)
 
+
+def parse_options():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--fastcgi', dest='fastcgi_socket')
+    parser.add_argument('--pidfile', dest='pidfile')
+    parser.add_argument('--debug', dest='debug', action='store_true')
+    return parser.parse_args()
+
+
+def run_fcgi(args):
+    from flup.server.fcgi import WSGIServer
+    sock_path = args.fastcgi_socket
+    wsgi_server = WSGIServer(civic_app, bindAddress=sock_path, umask=0)
+    wsgi_server.run()
+
+
+def fcgi_daemon(args):
+    if args.pidfile:
+        import os
+        import daemon
+        daemon_context = daemon.DaemonContext()
+        with daemon_context:
+            with open(args.pidfile, 'w') as pf:
+                pf.write(str(os.getpid()))
+            try:
+                run_fcgi(args)
+            finally:
+                os.unlink(args.pidfile)
+
+    else:
+        run_fcgi(args)
+
+
 def main():
-    import sys
+    args = parse_options()
 
-    if len(sys.argv) > 2 and sys.argv[-2] == "--fastcgi":
-        from flup.server.fcgi import WSGIServer
-        WSGIServer(civic_app, bindAddress=sys.argv[-1], umask=0).run()
-        return
-
-    elif sys.argv[-1] == "-d":
+    if args.debug:
         civic_app.debug = True
 
-    civic_app.run()
+    if args.fastcgi_socket:
+        return fcgi_daemon(args)
+
+    else:
+        civic_app.run()

@@ -8,6 +8,7 @@ setup(
         'sparql-client',
         'Products.ZSPARQLMethod',
         'flup',
+        'python-daemon',
     ],
     entry_points={'console_scripts': ['civic-site = civic_site:main']},
 )
