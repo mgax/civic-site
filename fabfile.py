@@ -8,6 +8,16 @@ server_rdfs = "%s/rdf" % server_prefix
 fourstore_bin_prefix = "/home/alexm/.local/bin"
 bin_prefix = "%s/bin" % server_prefix
 
+def push_dep(local_path):
+    base_name = os.path.basename(local_path)
+    server_tmp = "%s/tmp" % server_prefix
+    server_path = "%s/%s" % (server_tmp, base_name)
+    run("mkdir -p '%s'" % server_tmp)
+    put(local_path, server_path)
+    with cd(server_prefix):
+        run("bin/pip install '%s'" % server_path)
+    run("rm '%s'" % server_path)
+
 def _push_code():
     local("git push -f 'redcoat:%s' HEAD:incoming" % server_repo)
 
