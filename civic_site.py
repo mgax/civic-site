@@ -64,14 +64,14 @@ def parse_options():
     return parser.parse_args()
 
 
-def run_fcgi(args):
+def run_fcgi(app, args):
     from flup.server.fcgi import WSGIServer
     sock_path = args.fastcgi_socket
-    wsgi_server = WSGIServer(civic_app, bindAddress=sock_path, umask=0)
+    wsgi_server = WSGIServer(app, bindAddress=sock_path, umask=0)
     wsgi_server.run()
 
 
-def fcgi_daemon(args):
+def fcgi_daemon(app, args):
     if args.pidfile:
         import os
         import daemon
@@ -80,22 +80,35 @@ def fcgi_daemon(args):
             with open(args.pidfile, 'w') as pf:
                 pf.write(str(os.getpid()))
             try:
-                run_fcgi(args)
+                run_fcgi(app, args)
             finally:
                 os.unlink(args.pidfile)
 
     else:
-        run_fcgi(args)
+        run_fcgi(app, args)
+
+
+def run_locally(app):
+    from werkzeug import run_simple
+    options = {}
+    if civic_app.debug:
+        options['use_reloader'] = options['use_debugger'] = True
+    run_simple('127.0.0.1', 5000, app, **options)
 
 
 def main():
     args = parse_options()
+    app = civic_app
 
     if args.debug:
+        import os.path
+        from werkzeug.wsgi import SharedDataMiddleware
+        static = os.path.join(os.path.dirname(__file__), 'static/_build/html')
+        app = SharedDataMiddleware(app, {'/': static}, cache=False)
         civic_app.debug = True
 
     if args.fastcgi_socket:
-        return fcgi_daemon(args)
+        return fcgi_daemon(app, args)
 
     else:
-        civic_app.run()
+        return run_locally(app)
