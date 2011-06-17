@@ -27,12 +27,12 @@ class SparqlMethodTest(unittest.TestCase):
         self.mock_query.assert_called_once_with(self.endpoint, self.my_query)
 
     def test_plain_method(self):
-        names, [row] = self.method()
-        self.assertEqual(names, ['s', 'p', 'o'])
-        self.assertEqual(row, ('S1', 'P1', 'O1'))
+        result = self.method()
+        self.assertEqual(result.variables, ['s', 'p', 'o'])
+        self.assertEqual(list(result), [('S1', 'P1', 'O1')])
 
     def test_namedtuple_rows(self):
-        names, [row] = self.method()
+        [row] = self.method()
         self.assertEqual(row.s, 'S1')
         self.assertEqual(row.p, 'P1')
         self.assertEqual(row.o, 'O1')
