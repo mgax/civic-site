@@ -1,3 +1,4 @@
+from collections import namedtuple
 import sparql
 
 
@@ -10,5 +11,6 @@ class SparqlMethod(object):
     def __call__(self):
         result = sparql.query(self.endpoint, self.query_template)
         names = [unicode(name) for name in result.variables]
-        rows = (sparql.unpack_row(r) for r in result)
+        row_tuple = namedtuple('ResultRow', ' '.join(names))
+        rows = (row_tuple(*sparql.unpack_row(r)) for r in result)
         return names, rows
