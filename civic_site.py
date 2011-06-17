@@ -60,7 +60,7 @@ def parse_options():
     parser = argparse.ArgumentParser()
     parser.add_argument('--fastcgi', dest='fastcgi_socket')
     parser.add_argument('--pidfile', dest='pidfile')
-    parser.add_argument('--debug', dest='debug', action='store_true')
+    parser.add_argument('--debug', '-d', dest='debug', action='store_true')
     return parser.parse_args()
 
 
