@@ -40,19 +40,21 @@ def party_info(party_id):
 
 @civic_app.route("/test", methods=['GET', 'POST'])
 def sparql_test():
-    query = ""
-    result = None
-
     if flask.request.method == 'POST':
-        from Products.ZSPARQLMethod.pquery import QueryService
+        from Products.ZSPARQLMethod.bits import query_and_get_result
         endpoint = "http://localhost:11746/sparql/"
         query = flask.request.form['query']
-        # TODO QueryService assumes we pass in arguments; need to simplify
-        q = QueryService(endpoint, '', query)
-        result = q.data_for_test_html({})
+        result = query_and_get_result(endpoint, query)
 
-    return flask.render_template('sparql-test.html',
-                                 query=query, result=result)
+    else:
+        query = ""
+        result = None
+
+    options = {
+        'query': query,
+        'result': result,
+    }
+    return flask.render_template('sparql-test.html', **options)
 
 
 def parse_options():

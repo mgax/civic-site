@@ -44,21 +44,21 @@
   <br><input type="submit" value="evaluate">
 </form>
 
-{% if result.error %}
-<div class="sparql-error">{{ result.error }}</div>
+{% if error %}
+<div class="sparql-error">{{ error }}</div>
 {% endif %}
 
-{% if result.data -%}
+{% if result -%}
 <table class="sparql-results">
   <thead>
     <tr>
-    {%- for name in result.data.var_names %}
+    {%- for name in result.var_names %}
       <th>{{ name }}</th>
     {% endfor -%}
     </tr>
   </thead>
   <tbody>
-  {%- for row in result.data.rows %}
+  {%- for row in result.rows %}
     <tr>
     {%- for value in row %}
       <td>{{ value }}</td>
