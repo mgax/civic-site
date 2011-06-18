@@ -8,10 +8,7 @@ class SparqlResult(object):
     def __init__(self, raw_result):
         self.variables = raw_result.variables
         _row_type = namedtuple('ResultRow', ' '.join(self.variables))
-        self._rows = (_row_type(*sparql.unpack_row(r)) for r in raw_result)
-
-    def __iter__(self):
-        return self._rows
+        self.rows = (_row_type(*sparql.unpack_row(r)) for r in raw_result)
 
 
 class SparqlMethod(object):

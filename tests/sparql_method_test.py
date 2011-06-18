@@ -49,10 +49,10 @@ class SparqlMethodTest(unittest.TestCase):
     def test_plain_method(self):
         result = self.method()
         self.assertEqual(result.variables, ['s', 'p', 'o'])
-        self.assertEqual(list(result), [('S1', 'P1', 'O1')])
+        self.assertEqual(list(result.rows), [('S1', 'P1', 'O1')])
 
     def test_namedtuple_rows(self):
-        [row] = self.method()
+        [row] = self.method().rows
         self.assertEqual(row.s, 'S1')
         self.assertEqual(row.p, 'P1')
         self.assertEqual(row.o, 'O1')
