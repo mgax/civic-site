@@ -45,6 +45,8 @@ def query_library():
     options = {
         'query': method.query_template,
     }
+    if flask.request.method == 'POST':
+        options['result'] = method()
     return flask.render_template('sparql-test.html', **options)
 
 
