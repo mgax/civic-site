@@ -38,6 +38,16 @@ def party_info(party_id):
     return flask.render_template('party.html', **options)
 
 
+@civic_app.route("/query_library", methods=['GET', 'POST'])
+def query_library():
+    name = flask.request.args['name']
+    method = data.query_library[name]
+    options = {
+        'query': method.query_template,
+    }
+    return flask.render_template('sparql-test.html', **options)
+
+
 @civic_app.route("/test", methods=['GET', 'POST'])
 def sparql_test():
     if flask.request.method == 'POST':

@@ -110,3 +110,5 @@ def get_party(party_id):
     } for row in result]
 
     return out
+
+query_library = {}
