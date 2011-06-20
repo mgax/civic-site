@@ -21,6 +21,10 @@ class QueryLibraryTest(unittest.TestCase):
     def tearDown(self):
         self._library_patch.stop()
 
+    def test_list_queries(self):
+        page = self.client.get('/query_library/')
+        self.assertIn('<a href="/query_library/test1">test1</a>', page.data)
+
     def test_view_query(self):
         page = self.client.get('/query_library/test1')
         self.assertIn(self.query_string, page.data)
