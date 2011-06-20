@@ -38,9 +38,8 @@ def party_info(party_id):
     return flask.render_template('party.html', **options)
 
 
-@civic_app.route("/query_library", methods=['GET', 'POST'])
-def query_library():
-    name = flask.request.args['name']
+@civic_app.route("/query_library/<name>", methods=['GET', 'POST'])
+def query_library(name):
     method = data.query_library[name]
     options = {
         'query': method.query_template,

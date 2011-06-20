@@ -22,7 +22,7 @@ class QueryLibraryTest(unittest.TestCase):
         self._library_patch.stop()
 
     def test_view_query(self):
-        page = self.client.get('/query_library?name=test1')
+        page = self.client.get('/query_library/test1')
         self.assertIn(self.query_string, page.data)
 
     def test_run_query(self):
@@ -31,7 +31,7 @@ class QueryLibraryTest(unittest.TestCase):
         mock_sparql.add_response(self.query_string, ['s', 'p', 'o'],
             [[sparql.Literal(v) for v in ('S1', 'P1', 'O1')]])
 
-        page = self.client.post('/query_library?name=test1')
+        page = self.client.post('/query_library/test1')
         self.assertIn(self.query_string, page.data)
         self.assertIn('<th>s</th>', page.data)
         self.assertIn('<th>p</th>', page.data)
