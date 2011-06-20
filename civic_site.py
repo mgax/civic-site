@@ -48,12 +48,20 @@ def query_library():
 @civic_app.route("/query_library/<name>", methods=['GET', 'POST'])
 def query_library_entry(name):
     method = data.query_library[name]
+    values = flask.request.form.to_dict()
+    missing, query_html = method.map_arguments_html(**values)
     options = {
         'query': method.query_template,
+        'query_html': query_html,
+        'var_names': sorted(method.arg_map.keys()),
+        'values': values,
     }
+
     if flask.request.method == 'POST':
-        options['result'] = method()
-    return flask.render_template('sparql-test.html', **options)
+        if not missing:
+            options['result'] = method(**values)
+
+    return flask.render_template('query-library-test.html', **options)
 
 
 @civic_app.route("/test", methods=['GET', 'POST'])
