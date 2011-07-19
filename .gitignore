@@ -1,3 +1,4 @@
 *.pyc
 *.egg-info
 static/_build
+local_fabfile.py

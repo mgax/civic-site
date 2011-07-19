@@ -2,8 +2,8 @@ import os.path
 from StringIO import StringIO
 from fabric.api import env, local, cd, run, put, open_shell
 
-env.hosts = ['redcoat']
-server_prefix = "/home/alexm/sites/civic.grep.ro"
+from local_fabfile import *
+
 server_repo = "%s/src/civic-site" % server_prefix
 server_rdfs = "%s/rdf" % server_prefix
 fourstore_bin_prefix = "/home/alexm/.local/bin"
